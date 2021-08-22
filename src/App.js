@@ -15,14 +15,14 @@ export default function App() {
         <Route exact path="/exercise1">
           <div>
             <Link to="/" className="btn" ><ChevronLeft size={16} />Return</Link>
-            <h1>Normal Range</h1>
+            <h1 className="title">Normal Range</h1>
             <Range />
           </div>
         </Route>
         <Route exact path="/exercise2">
           <div>
             <Link to="/" className="btn" ><ChevronLeft size={16} />Return</Link>
-            <h1>Fixed values range</h1>
+            <h1 className="title">Fixed values range</h1>
             <Range />
           </div>
         </Route>
