@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,6 +9,20 @@ import { ChevronLeft } from 'react-feather';
 import Range from "./components/Range"
 
 export default function App() {
+
+  const [normalRange, setNormalRange] = useState({})
+  const [fixedRange, setFixedRange] = useState([])
+
+  useEffect(() => {
+    fetch('https://demo2384452.mockable.io/normal')
+      .then(response => response.json())
+      .then(data => setNormalRange(data));
+
+    fetch('https://demo2384452.mockable.io/fixed')
+      .then(response => response.json())
+      .then(data => setFixedRange(data));
+  }, [])
+
   return (
     <Router>
       <Switch>
@@ -16,14 +30,14 @@ export default function App() {
           <div>
             <Link to="/" className="btn" ><ChevronLeft size={16} />Return</Link>
             <h1 className="title">Normal Range</h1>
-            <Range />
+            <Range min={normalRange.min} max={normalRange.max} />
           </div>
         </Route>
         <Route exact path="/exercise2">
           <div>
             <Link to="/" className="btn" ><ChevronLeft size={16} />Return</Link>
             <h1 className="title">Fixed values range</h1>
-            <Range />
+            <Range prices={fixedRange} />
           </div>
         </Route>
         <Route exact path="/">
