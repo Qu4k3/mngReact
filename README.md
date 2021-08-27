@@ -21,7 +21,11 @@ npm run build
 
 ## Webgraphy
 
-[Create a project in React without create-react-app](https://dev.to/alfredocu/create-a-project-in-react-without-create-react-app-spanish-54ni)
+- [Create a project in React without create-react-app](https://dev.to/alfredocu/create-a-project-in-react-without-create-react-app-spanish-54ni)
+
+- [Unit testing](https://testing-library.com/docs/react-testing-library/intro/)
+
+- [Unit testing jsdom config](https://jestjs.io/docs/configuration#testenvironment-string)
 
 ## License
 
