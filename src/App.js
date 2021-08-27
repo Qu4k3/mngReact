@@ -11,17 +11,29 @@ import Range from "./components/Range"
 export default function App() {
 
   const [normalRange, setNormalRange] = useState({})
+  const [normalRangeIsLoading, setNormalRangeIsLoading] = useState(true)
   const [fixedRange, setFixedRange] = useState([])
+  const [fixedRangeIsLoading, setFixedRangeIsLoading] = useState(true)
 
   useEffect(() => {
     fetch('https://demo2384452.mockable.io/normal')
       .then(response => response.json())
-      .then(data => setNormalRange(data));
+      .then(data => {
+        setNormalRange(data)
+        setNormalRangeIsLoading(false)
+      });
 
     fetch('https://demo2384452.mockable.io/fixed')
       .then(response => response.json())
-      .then(data => setFixedRange(data));
+      .then(data => {
+        setFixedRange(data)
+        setFixedRangeIsLoading(false)
+      });
   }, [])
+
+  console.log(normalRangeIsLoading)
+
+
 
   return (
     <Router>
@@ -30,14 +42,22 @@ export default function App() {
           <div>
             <Link to="/" className="btn" ><ChevronLeft size={16} />Return</Link>
             <h1 className="title">Normal Range</h1>
-            <Range min={normalRange.min} max={normalRange.max} />
+            {!normalRangeIsLoading && (
+              Object.entries(normalRange).length > 0
+                ? <Range min={normalRange.min} max={normalRange.max} />
+                : <p>Provide min / max props</p>
+            )}
           </div>
         </Route>
         <Route exact path="/exercise2">
           <div>
             <Link to="/" className="btn" ><ChevronLeft size={16} />Return</Link>
             <h1 className="title">Fixed values range</h1>
-            <Range prices={fixedRange} />
+            {!fixedRangeIsLoading && (
+              fixedRange.length > 0
+                ? <Range prices={fixedRange} />
+                : <p>Provide array of prices</p>
+            )}
           </div>
         </Route>
         <Route exact path="/">
