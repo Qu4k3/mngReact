@@ -31,10 +31,6 @@ export default function App() {
       });
   }, [])
 
-  console.log(normalRangeIsLoading)
-
-
-
   return (
     <Router>
       <Switch>
