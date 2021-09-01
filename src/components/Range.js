@@ -93,7 +93,7 @@ export default function Range({ min, max, prices }) {
       jumpToInPercent = jumpMin
       setCurrentMinValue(jumpMin)
     } else {
-      jumpToInPercent = ((jumpMin * 100) / currentMaxValue)
+      jumpToInPercent = ((jumpMin * 100) / maxValue)
       setCurrentMinValue(jumpMin)
     }
 
@@ -109,7 +109,7 @@ export default function Range({ min, max, prices }) {
       jumpToInPercent = jumpMax
       setCurrentMaxValue(jumpMax)
     } else {
-      jumpToInPercent = ((jumpMax * 100) / currentMinValue)
+      jumpToInPercent = ((jumpMax * 100) / maxValue)
       setCurrentMaxValue(jumpMax)
     }
 
