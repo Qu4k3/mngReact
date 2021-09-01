@@ -67,7 +67,10 @@ export default function Range({ min, max, prices }) {
     const dragedWidthInPercent = (dragedWidth * 100) / sliderWidth;
     const currentMinValue = Math.abs(parseInt((maxValue * dragedWidthInPercent) / 100));
 
-    if ((currentMinValue >= minValue) && (currentMinValue <= (currentMaxValue - minValueBetween))) {
+    if ((dragedWidth <= 0)) {
+      minValuePercent.current.style.left = 0 + "%";
+      setCurrentMinValue(minValue)
+    } else if ((currentMinValue >= minValue) && (currentMinValue <= (currentMaxValue - minValueBetween))) {
       minValuePercent.current.style.left = dragedWidthInPercent + "%";
       setCurrentMinValue(currentMinValue)
     }
@@ -78,7 +81,10 @@ export default function Range({ min, max, prices }) {
     const dragedWidthInPercent = (dragedWidth * 100) / sliderWidth;
     const currentMaxValue = Math.abs(parseInt((maxValue * dragedWidthInPercent) / 100));
 
-    if ((currentMaxValue >= (currentMinValue + minValueBetween)) && (currentMaxValue <= maxValue)) {
+    if ((dragedWidth <= minValueBetween)) {
+      maxValuePercent.current.style.left = minValueBetween + "%";
+      setCurrentMaxValue(minValueBetween)
+    } else if ((currentMaxValue >= (currentMinValue + minValueBetween)) && (currentMaxValue <= maxValue)) {
       maxValuePercent.current.style.left = dragedWidthInPercent + "%";
       setCurrentMaxValue(currentMaxValue)
     }
@@ -92,6 +98,9 @@ export default function Range({ min, max, prices }) {
       jumpMin = (currentMaxValue - minValueBetween)
       jumpToInPercent = jumpMin
       setCurrentMinValue(jumpMin)
+    } else if (jumpMin <= minValue) {
+      jumpToInPercent = minValue
+      setCurrentMaxValue(minValue)
     } else {
       jumpToInPercent = ((jumpMin * 100) / maxValue)
       setCurrentMinValue(jumpMin)
@@ -108,6 +117,9 @@ export default function Range({ min, max, prices }) {
       jumpMax = (currentMinValue + minValueBetween)
       jumpToInPercent = jumpMax
       setCurrentMaxValue(jumpMax)
+    } else if (jumpMax >= maxValue) {
+      jumpToInPercent = maxValue
+      setCurrentMaxValue(maxValue)
     } else {
       jumpToInPercent = ((jumpMax * 100) / maxValue)
       setCurrentMaxValue(jumpMax)
