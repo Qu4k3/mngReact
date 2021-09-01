@@ -61,12 +61,16 @@ export default function Range({ min, max, prices }) {
     setCursor('grabbing')
     document.addEventListener('mousemove', handleOnMouseMoveMin)
     document.addEventListener('mouseup', handleOnMouseUpMin)
+    document.addEventListener('touchmove', handleOnMouseMoveMin)
+    document.addEventListener('touchend', handleOnMouseUpMin)
   }
 
   function handleOnMouseUpMin() {
     setCursor('grab')
     document.removeEventListener('mousemove', handleOnMouseMoveMin)
     document.removeEventListener('mouseup', handleOnMouseUpMin)
+    document.removeEventListener('touchmove', handleOnMouseMoveMin)
+    document.removeEventListener('touchend', handleOnMouseUpMin)
   }
 
   function handleOnMouseMoveMin(e) {
@@ -96,12 +100,16 @@ export default function Range({ min, max, prices }) {
     setCursor('grabbing')
     document.addEventListener('mousemove', handleOnMouseMoveMax)
     document.addEventListener('mouseup', handleOnMouseUpMax)
+    document.addEventListener('touchmove', handleOnMouseMoveMax)
+    document.addEventListener('touchend', handleOnMouseUpMax)
   }
 
   function handleOnMouseUpMax() {
     setCursor('grab')
     document.removeEventListener('mousemove', handleOnMouseMoveMax)
     document.removeEventListener('mouseup', handleOnMouseUpMax)
+    document.removeEventListener('touchmove', handleOnMouseMoveMax)
+    document.removeEventListener('touchend', handleOnMouseUpMax)
   }
 
   function handleOnMouseMoveMax(e) {
