@@ -11,6 +11,8 @@ export default function Range({ min, max, prices }) {
   const [minValue, setMinValue] = useState()
   const [maxValue, setMaxValue] = useState()
 
+  const [rangeStep] = useState(prices && prices.length)
+
   const [cursor, setCursor] = useState('grab')
 
   const [currentMinValue, setCurrentMinValue] = useState(min || Math.min(...prices))
@@ -49,19 +51,6 @@ export default function Range({ min, max, prices }) {
     document.removeEventListener('mouseup', handleOnMouseUpMin)
   }
 
-  function handleOnMouseDownMax(e) {
-    e.preventDefault()
-    setCursor('grabbing')
-    document.addEventListener('mousemove', handleOnMouseMoveMax)
-    document.addEventListener('mouseup', handleOnMouseUpMax)
-  }
-
-  function handleOnMouseUpMax() {
-    setCursor('grab')
-    document.removeEventListener('mousemove', handleOnMouseMoveMax)
-    document.removeEventListener('mouseup', handleOnMouseUpMax)
-  }
-
   function handleOnMouseMoveMin(e) {
     const dragedWidth = e.clientX - offsetSliderWidth;
     const dragedWidthInPercent = (dragedWidth * 100) / sliderWidth;
@@ -74,6 +63,19 @@ export default function Range({ min, max, prices }) {
       minValuePercent.current.style.left = dragedWidthInPercent + "%";
       setCurrentMinValue(currentMinValue)
     }
+  }
+
+  function handleOnMouseDownMax(e) {
+    e.preventDefault()
+    setCursor('grabbing')
+    document.addEventListener('mousemove', handleOnMouseMoveMax)
+    document.addEventListener('mouseup', handleOnMouseUpMax)
+  }
+
+  function handleOnMouseUpMax() {
+    setCursor('grab')
+    document.removeEventListener('mousemove', handleOnMouseMoveMax)
+    document.removeEventListener('mouseup', handleOnMouseUpMax)
   }
 
   function handleOnMouseMoveMax(e) {
@@ -100,7 +102,7 @@ export default function Range({ min, max, prices }) {
       setCurrentMinValue(jumpMin)
     } else if (jumpMin <= minValue) {
       jumpToInPercent = minValue
-      setCurrentMaxValue(minValue)
+      setCurrentMinValue(minValue)
     } else {
       jumpToInPercent = ((jumpMin * 100) / maxValue)
       setCurrentMinValue(jumpMin)
@@ -135,7 +137,7 @@ export default function Range({ min, max, prices }) {
         <span className="input-range__label-container">{currentMinValue}</span>
       </span>
 
-      <div className="input-range__track input-range__track--background" >
+      <div className="input-range__track input-range__track--background" style={prices && { cursor: 'default' }}>
 
         <div className="input-range__track input-range__track--active" style={{ left: '0%', width: '100%' }}></div>
 
@@ -143,7 +145,7 @@ export default function Range({ min, max, prices }) {
           <span className="input-range__label input-range__label--value">
             <span
               className="input-range__label-container"
-              contentEditable="true"
+              contentEditable={prices ? false : true}
               onBlur={handleOnBlurPriceChangeMin}
               dangerouslySetInnerHTML={{ __html: currentMinValue }}
             ></span>€
@@ -166,7 +168,7 @@ export default function Range({ min, max, prices }) {
           <span className="input-range__label input-range__label--value">
             <span
               className="input-range__label-container"
-              contentEditable="true"
+              contentEditable={prices ? false : true}
               onBlur={handleOnBlurPriceChangeMax}
               dangerouslySetInnerHTML={{ __html: currentMaxValue }}
             ></span>€
