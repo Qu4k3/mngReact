@@ -86,16 +86,32 @@ export default function Range({ min, max, prices }) {
 
   function handleOnBlurPriceChangeMin(e) {
     let jumpMin = (parseInt(e.currentTarget.textContent))
-    setCurrentMinValue(jumpMin)
-    const jumpToInPercent = ((jumpMin * 100) / maxValue)
+    let jumpToInPercent
+
+    if (jumpMin >= (currentMaxValue - minValueBetween)) {
+      jumpMin = (currentMaxValue - minValueBetween)
+      jumpToInPercent = jumpMin
+      setCurrentMinValue(jumpMin)
+    } else {
+      jumpToInPercent = ((jumpMin * 100) / currentMaxValue)
+      setCurrentMinValue(jumpMin)
+    }
 
     minValuePercent.current.style.left = jumpToInPercent + "%";
   }
 
   function handleOnBlurPriceChangeMax(e) {
     let jumpMax = (parseInt(e.currentTarget.textContent))
-    setCurrentMaxValue(jumpMax)
-    const jumpToInPercent = ((jumpMax * 100) / maxValue)
+    let jumpToInPercent
+
+    if (jumpMax <= (currentMinValue + minValueBetween)) {
+      jumpMax = (currentMinValue + minValueBetween)
+      jumpToInPercent = jumpMax
+      setCurrentMaxValue(jumpMax)
+    } else {
+      jumpToInPercent = ((jumpMax * 100) / currentMinValue)
+      setCurrentMaxValue(jumpMax)
+    }
 
     maxValuePercent.current.style.left = jumpToInPercent + "%";
   }
