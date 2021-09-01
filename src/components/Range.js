@@ -78,8 +78,6 @@ export default function Range({ min, max, prices }) {
     const dragedWidthInPercent = (dragedWidth * 100) / sliderWidth;
     const currentMaxValue = Math.abs(parseInt((maxValue * dragedWidthInPercent) / 100));
 
-    console.log('currentMaxValue', currentMaxValue, 'other ', (currentMinValue + minValueBetween))
-
     if ((currentMaxValue >= (currentMinValue + minValueBetween)) && (currentMaxValue <= maxValue)) {
       maxValuePercent.current.style.left = dragedWidthInPercent + "%";
       setCurrentMaxValue(currentMaxValue)
@@ -87,11 +85,19 @@ export default function Range({ min, max, prices }) {
   }
 
   function handleOnBlurPriceChangeMin(e) {
-    setCurrentMinValue(parseInt(e.currentTarget.textContent))
+    let jumpMin = (parseInt(e.currentTarget.textContent))
+    setCurrentMinValue(jumpMin)
+    const jumpToInPercent = ((jumpMin * 100) / maxValue)
+
+    minValuePercent.current.style.left = jumpToInPercent + "%";
   }
 
   function handleOnBlurPriceChangeMax(e) {
-    setCurrentMinValue(parseInt(e.currentTarget.textContent))
+    let jumpMax = (parseInt(e.currentTarget.textContent))
+    setCurrentMaxValue(jumpMax)
+    const jumpToInPercent = ((jumpMax * 100) / maxValue)
+
+    maxValuePercent.current.style.left = jumpToInPercent + "%";
   }
 
   return (
