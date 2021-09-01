@@ -37,13 +37,17 @@ export default function Range({ min, max, prices }) {
   }, [])
 
   useEffect(() => {
-    minValuePercent.current.style.left = ((leftPosition / rangeStep) * 100) + "%";
-    setCurrentMinValue(prices[leftPosition])
+    if (prices) {
+      minValuePercent.current.style.left = ((leftPosition / rangeStep) * 100) + "%";
+      setCurrentMinValue(prices[leftPosition])
+    }
   }, [leftPosition])
 
   useEffect(() => {
-    maxValuePercent.current.style.left = ((rightPosition / rangeStep) * 100) + "%";
-    setCurrentMaxValue(prices[rightPosition])
+    if (prices) {
+      maxValuePercent.current.style.left = ((rightPosition / rangeStep) * 100) + "%";
+      setCurrentMaxValue(prices[rightPosition])
+    }
   }, [rightPosition])
 
   console.log('sliderWidth: ', sliderWidth, '\noffsetSliderWidth: ', offsetSliderWidth)
@@ -70,21 +74,21 @@ export default function Range({ min, max, prices }) {
     const dragedWidthInPercent = (dragedWidth * 100) / sliderWidth;
     const currentMinValue = Math.abs(parseInt((maxValue * dragedWidthInPercent) / 100));
 
-    if (prices) {
-      const dragedPortion = sliderWidth / rangeStep
 
-      if ((dragedWidth <= 0)) {
-        minValuePercent.current.style.left = 0 + "%";
-        setCurrentMinValue(minValue)
-      } else if (dragedWidth > (dragedPortion * leftPosition) && leftPosition < rightPosition - 1) {
-        setLeftPosition(leftPosition + 1)
-      } else if (dragedWidth < (dragedPortion * leftPosition)) {
-        setLeftPosition(leftPosition - 1)
-      } else if ((currentMinValue >= minValue) && (currentMinValue <= (currentMaxValue - minValueBetween))) {
-        minValuePercent.current.style.left = dragedWidthInPercent + "%";
-        setCurrentMinValue(currentMinValue)
-      }
+    const dragedPortion = sliderWidth / rangeStep
+
+    if ((dragedWidth <= 0)) {
+      minValuePercent.current.style.left = 0 + "%";
+      setCurrentMinValue(minValue)
+    } else if (dragedWidth > (dragedPortion * leftPosition) && leftPosition < rightPosition - 1) {
+      setLeftPosition(leftPosition + 1)
+    } else if (dragedWidth < (dragedPortion * leftPosition)) {
+      setLeftPosition(leftPosition - 1)
+    } else if ((currentMinValue >= minValue) && (currentMinValue <= (currentMaxValue - minValueBetween))) {
+      minValuePercent.current.style.left = dragedWidthInPercent + "%";
+      setCurrentMinValue(currentMinValue)
     }
+
   }
 
   function handleOnMouseDownMax(e) {
@@ -105,26 +109,26 @@ export default function Range({ min, max, prices }) {
     const dragedWidthInPercent = (dragedWidth * 100) / sliderWidth;
     const currentMaxValue = Math.abs(parseInt((maxValue * dragedWidthInPercent) / 100));
 
-    if (prices) {
-      const dragedPortion = sliderWidth / rangeStep
 
-      console.log('dragedwidth: ', dragedWidth, 'dragedPortion ', dragedPortion * rightPosition, 'rightposition ', rightPosition)
+    const dragedPortion = sliderWidth / rangeStep
 
-      if ((dragedWidth <= minValueBetween)) {
-        maxValuePercent.current.style.left = minValueBetween + "%";
-        setCurrentMaxValue(minValueBetween)
-      } else if (dragedWidth > sliderWidth) {
-        maxValuePercent.current.style.left = maxValuePercent + "%";
-        setCurrentMaxValue(maxValue)
-      } else if (dragedWidth < (dragedPortion * rightPosition) && rightPosition > leftPosition + 1) {
-        setRightPosition(rightPosition - 1)
-      } else if (dragedWidth > (dragedPortion * rightPosition)) {
-        setRightPosition(rightPosition + 1)
-      } else if (!prices && ((currentMaxValue >= (currentMinValue + minValueBetween)) && (currentMaxValue <= maxValue))) {
-        maxValuePercent.current.style.left = dragedWidthInPercent + "%";
-        setCurrentMaxValue(currentMaxValue)
-      }
+    console.log('dragedwidth: ', dragedWidth, 'dragedPortion ', dragedPortion * rightPosition, 'rightposition ', rightPosition)
+
+    if ((dragedWidth <= minValueBetween)) {
+      maxValuePercent.current.style.left = minValueBetween + "%";
+      setCurrentMaxValue(minValueBetween)
+    } else if (dragedWidth > sliderWidth) {
+      maxValuePercent.current.style.left = maxValuePercent + "%";
+      setCurrentMaxValue(maxValue)
+    } else if (dragedWidth < (dragedPortion * rightPosition) && rightPosition > leftPosition + 1) {
+      setRightPosition(rightPosition - 1)
+    } else if (dragedWidth > (dragedPortion * rightPosition)) {
+      setRightPosition(rightPosition + 1)
+    } else if (!prices && ((currentMaxValue >= (currentMinValue + minValueBetween)) && (currentMaxValue <= maxValue))) {
+      maxValuePercent.current.style.left = dragedWidthInPercent + "%";
+      setCurrentMaxValue(currentMaxValue)
     }
+
   }
 
   function handleOnBlurPriceChangeMin(e) {
