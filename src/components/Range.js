@@ -2,16 +2,18 @@ import React, { useEffect, useRef, useState } from "react"
 
 export default function Range({ min, max, prices }) {
 
-  let slider = useRef()
-  let minValuePercent = useRef()
-  let maxValuePercent = useRef()
+  const slider = useRef()
+  const minValuePercent = useRef()
+  const maxValuePercent = useRef()
 
   const minValueBetween = 15 // minimum space/price between min and max bullets, prevent overlap
 
   const [minValue, setMinValue] = useState()
   const [maxValue, setMaxValue] = useState()
 
-  const [rangeStep] = useState(prices && prices.length)
+  const [rangeStep] = useState(prices && prices.length - 1)
+  const [leftPosition, setLeftPosition] = useState(0)
+  const [rightPosition, setRightPosition] = useState(rangeStep)
 
   const [cursor, setCursor] = useState('grab')
 
@@ -34,9 +36,21 @@ export default function Range({ min, max, prices }) {
     setOffsetSliderWidth(slider.current.offsetLeft)
   }, [])
 
+  useEffect(() => {
+    minValuePercent.current.style.left = ((leftPosition / rangeStep) * 100) + "%";
+    setCurrentMinValue(prices[leftPosition])
+  }, [leftPosition])
+
+  useEffect(() => {
+    maxValuePercent.current.style.left = ((rightPosition / rangeStep) * 100) + "%";
+    setCurrentMaxValue(prices[rightPosition])
+  }, [rightPosition])
+
   console.log('sliderWidth: ', sliderWidth, '\noffsetSliderWidth: ', offsetSliderWidth)
 
   console.log('min: ', currentMinValue, '\nmax: ', currentMaxValue)
+
+  console.log('left: ', leftPosition, '\nright: ', rightPosition)
 
   function handleOnMouseDownMin(e) {
     e.preventDefault()
@@ -56,12 +70,20 @@ export default function Range({ min, max, prices }) {
     const dragedWidthInPercent = (dragedWidth * 100) / sliderWidth;
     const currentMinValue = Math.abs(parseInt((maxValue * dragedWidthInPercent) / 100));
 
-    if ((dragedWidth <= 0)) {
-      minValuePercent.current.style.left = 0 + "%";
-      setCurrentMinValue(minValue)
-    } else if ((currentMinValue >= minValue) && (currentMinValue <= (currentMaxValue - minValueBetween))) {
-      minValuePercent.current.style.left = dragedWidthInPercent + "%";
-      setCurrentMinValue(currentMinValue)
+    if (prices) {
+      const dragedPortion = sliderWidth / rangeStep
+
+      if ((dragedWidth <= 0)) {
+        minValuePercent.current.style.left = 0 + "%";
+        setCurrentMinValue(minValue)
+      } else if (dragedWidth > (dragedPortion * leftPosition) && leftPosition < rightPosition - 1) {
+        setLeftPosition(leftPosition + 1)
+      } else if (dragedWidth < (dragedPortion * leftPosition)) {
+        setLeftPosition(leftPosition - 1)
+      } else if ((currentMinValue >= minValue) && (currentMinValue <= (currentMaxValue - minValueBetween))) {
+        minValuePercent.current.style.left = dragedWidthInPercent + "%";
+        setCurrentMinValue(currentMinValue)
+      }
     }
   }
 
@@ -83,12 +105,25 @@ export default function Range({ min, max, prices }) {
     const dragedWidthInPercent = (dragedWidth * 100) / sliderWidth;
     const currentMaxValue = Math.abs(parseInt((maxValue * dragedWidthInPercent) / 100));
 
-    if ((dragedWidth <= minValueBetween)) {
-      maxValuePercent.current.style.left = minValueBetween + "%";
-      setCurrentMaxValue(minValueBetween)
-    } else if ((currentMaxValue >= (currentMinValue + minValueBetween)) && (currentMaxValue <= maxValue)) {
-      maxValuePercent.current.style.left = dragedWidthInPercent + "%";
-      setCurrentMaxValue(currentMaxValue)
+    if (prices) {
+      const dragedPortion = sliderWidth / rangeStep
+
+      console.log('dragedwidth: ', dragedWidth, 'dragedPortion ', dragedPortion * rightPosition, 'rightposition ', rightPosition)
+
+      if ((dragedWidth <= minValueBetween)) {
+        maxValuePercent.current.style.left = minValueBetween + "%";
+        setCurrentMaxValue(minValueBetween)
+      } else if (dragedWidth > sliderWidth) {
+        maxValuePercent.current.style.left = maxValuePercent + "%";
+        setCurrentMaxValue(maxValue)
+      } else if (dragedWidth < (dragedPortion * rightPosition) && rightPosition > leftPosition + 1) {
+        setRightPosition(rightPosition - 1)
+      } else if (dragedWidth > (dragedPortion * rightPosition)) {
+        setRightPosition(rightPosition + 1)
+      } else if ((currentMaxValue >= (currentMinValue + minValueBetween)) && (currentMaxValue <= maxValue)) {
+        maxValuePercent.current.style.left = dragedWidthInPercent + "%";
+        setCurrentMaxValue(currentMaxValue)
+      }
     }
   }
 
