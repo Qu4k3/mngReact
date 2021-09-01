@@ -27,6 +27,8 @@ npm run build
 
 - [Unit testing jsdom config](https://jestjs.io/docs/configuration#testenvironment-string)
 
+- [Range slider examples](https://codepen.io/OlgaKoplik/)
+
 ## License
 
 [Creative Commons Attribution Non Commercial No Derivatives 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode)
