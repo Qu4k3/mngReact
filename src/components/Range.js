@@ -120,7 +120,7 @@ export default function Range({ min, max, prices }) {
         setRightPosition(rightPosition - 1)
       } else if (dragedWidth > (dragedPortion * rightPosition)) {
         setRightPosition(rightPosition + 1)
-      } else if ((currentMaxValue >= (currentMinValue + minValueBetween)) && (currentMaxValue <= maxValue)) {
+      } else if (!prices && ((currentMaxValue >= (currentMinValue + minValueBetween)) && (currentMaxValue <= maxValue))) {
         maxValuePercent.current.style.left = dragedWidthInPercent + "%";
         setCurrentMaxValue(currentMaxValue)
       }
