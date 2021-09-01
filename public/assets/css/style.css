@@ -151,7 +151,7 @@ body {
 .input-range__label--value {
   position: absolute;
   top: 10px;
-  left: -4px;
+  left: -10px;
 }
 .input-range__label-container {
   position: relative;
@@ -175,8 +175,4 @@ body {
 
 .input-range__input:focus {
   outline: none;
-}
-
-.input-range__input:hover {
-  cursor: pointer;
 }
